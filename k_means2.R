@@ -1,37 +1,19 @@
-### K-Means Clusterins #### 
-
-data <- readRDS("~/MSBA/BNEDCCapstoneProject/CSV Files/clean_economic_indicators.rds")
-
-install.packages("tidyr")
-install.packages("cluster")
-install.packages("factoextra")
-install.packages("sparcl")
-
 library(tidyr)
 library(cluster)
 library(factoextra) # clustering algorithms & visualization 
 library(sparcl)
 library(dplyr)
 
-data <- data %>%
-  select(3,4,1,2, 5:18)
+data_no_cities <- readRDS("~/MSBA/BNEDCCapstoneProject/CSV Files/data_no_cities.rds")
 
-data$population <- as.numeric(data$population)
-
-
-data_2 <- scale(data[,3:18])  
-data_3 <- data %>% 
-  select(1,2)
-
-data <- cbind.data.frame(data_3, data_2)
-
+data <- data_no_cities
 
 ###### Initial Clustering ####
 
 
 
 set.seed(12345) # Set seed for reproducibility
-fit_1 <- kmeans(x = data[3:18], # Set data as explantory variables 
+fit_1 <- kmeans(x = data[3:13], # Set data as explantory variables 
                 centers = 4,  # Set number of clusters
                 nstart = 25, # Set number of starts
                 iter.max = 100 ) # Set maximum number of iterations to use
@@ -42,18 +24,8 @@ clusters_1 <- fit_1$cluster
 # Extract centers
 centers_1 <- fit_1$centers
 
-# Take out city cluster
-data_no_cities <- data[clusters_1 != 1,]
-
-data_no_cities <- data_no_cities %>%
-  select(county_name, county_code, density, population, poverty_percent, household_income,
-         household_income_to_state, rural_urban_continum, urban_influence, education_1_percent,
-         education_2_percent, education_3_percent, education_4_percent)
-
-saveRDS(data_no_cities, file = "data_no_cities.rds")
-
 summary(as.factor(clusters_1))
-####
+
 
 cat("Cluster 1 county_name:\n")
 
@@ -138,12 +110,4 @@ group_check_4 <- group_4 %>%
 
 
 # Our county is in group 3 #### 
-
-
-
-
-
-
-
-
 
