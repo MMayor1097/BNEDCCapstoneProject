@@ -109,5 +109,5 @@ group_check_4 <- group_4 %>%
   filter(str_detect(group_4, "McLean County, Illinois"))
 
 
-# Our county is in group 3 #### 
+# Our county is in group 4 #### 
 
