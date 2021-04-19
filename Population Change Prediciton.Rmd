@@ -96,4 +96,3 @@ predict(PopulationModel2, newdata = data.frame(
   
 ))
 ```
-
