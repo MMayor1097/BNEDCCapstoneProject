@@ -1,0 +1,99 @@
+---
+title: "BNEDC Prediction"
+author: "Michael Mayor"
+date: "4/16/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+data <- read_csv("~/MSBA/BNEDCCapstoneProject/votes (2).csv")
+```
+```{r}
+data <- data %>%
+  select(-1, -2, -3, -13, -14, -15, -16, -17, -18, -19, -20, -21, -22, -23, -24, -25, -27, -29, -79, -80, -81, -82)
+data
+```
+
+```{r}
+data <- data %>%
+  select(7, 8, 9, 11, 12, 13, 14, 29, 38, 44, 45, 46, 47, 48, 49, 50, 58, 27, 28)
+data
+```
+
+```{r}
+colnames(data) <-c("DemPercentRepPercent", "State", "County", "PopulationChange", "PercentAgeUnder5", "PercentAgeUnder18", "PercentAgeOver65", "NumberVets", "MedianHouseIncome", "NumberFirms", "PercentBlackFirms", "PercentNAFirms", "PercentAsianFirms", "PercentHawaiianFirms", "PercentHispanicFirms", "PercentWomenFirms", "Density", "PercentHSGrad", "PercentCollegeGrad")
+```
+
+```{r}
+data
+```
+
+```{r}
+data <- data %>%
+  select(2:19)
+```
+
+```{r}
+PopulationModel <- lm(PopulationChange ~ PercentAgeUnder5 + PercentAgeUnder5 + PercentAgeUnder18 + PercentAgeOver65 + NumberVets + MedianHouseIncome + NumberFirms + PercentBlackFirms + PercentNAFirms + PercentAsianFirms + PercentHawaiianFirms + PercentHispanicFirms + PercentWomenFirms + Density + PercentHSGrad + PercentCollegeGrad, data = data)
+
+summary(PopulationModel)
+```
+
+```{r}
+predictions <- predict(PopulationModel, data)
+```
+
+```{r}
+predict(PopulationModel, newdata = data.frame(
+  PercentAgeUnder5 = 5,
+  PercentAgeUnder18 = 15,
+  PercentAgeOver65 = 15,
+  NumberVets = 250,
+  MedianHouseIncome = 60000,
+  NumberFirms = 250,
+  PercentBlackFirms = 12,
+  PercentNAFirms = 6,
+  PercentAsianFirms = 8,
+  PercentHawaiianFirms = 4,
+  PercentHispanicFirms = 8,
+  PercentWomenFirms = 46,
+  Density = 50,
+  PercentHSGrad = 85,
+  PercentCollegeGrad = 25
+  
+))
+```
+
+```{r}
+PopulationModel2 <- lm(PopulationChange ~ PercentAgeUnder5 + PercentAgeUnder5 + PercentAgeUnder18 + PercentAgeOver65 + NumberVets + MedianHouseIncome + NumberFirms +  Density + PercentHSGrad + PercentCollegeGrad, data = data)
+
+summary(PopulationModel2)
+```
+
+```{r}
+predictions <- predict(PopulationModel2, data)
+```
+
+```{r}
+predict(PopulationModel2, newdata = data.frame(
+  PercentAgeUnder5 = 2,
+  PercentAgeUnder18 = 50,
+  PercentAgeOver65 = 25,
+  NumberVets = 10,
+  MedianHouseIncome = 15000,
+  NumberFirms = 1500,
+  Density = 170,
+  PercentHSGrad = 85,
+  PercentCollegeGrad = 5
+  
+))
+```
+
